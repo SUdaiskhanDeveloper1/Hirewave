@@ -1,0 +1,273 @@
+@import 'tailwindcss';
+
+/* `dark:` utilities follow the header's light / night toggle, not the OS setting. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/*
+ * Design tokens.
+ *
+ * Light values live on :root, night values are swapped in under
+ * `[data-theme='dark']` (set by the header toggle, restored before first paint by
+ * the inline script in layout.tsx), and `@theme inline` maps them onto Tailwind's
+ * colour namespace.
+ *
+ * Palette: deep blue primary, cool neutral greys, and three semantic colours.
+ * Nothing decorative - every token below is used by a component.
+ */
+:root {
+  color-scheme: light;
+
+  /* Surfaces */
+  --surface-canvas: oklch(0.984 0.002 255);
+  --surface-raised: oklch(1 0 0);
+  --surface-sunken: oklch(0.962 0.004 255);
+  --surface-inverse: oklch(0.24 0.03 258);
+
+  /* Text */
+  --text-primary: oklch(0.22 0.025 258);
+  --text-secondary: oklch(0.46 0.018 258);
+  --text-muted: oklch(0.585 0.015 258);
+  --text-inverse: oklch(0.98 0.002 255);
+
+  /* Borders */
+  --line-subtle: oklch(0.918 0.006 258);
+  --line-strong: oklch(0.855 0.009 258);
+
+  /* Primary: deep blue */
+  --brand-50: oklch(0.968 0.018 259);
+  --brand-100: oklch(0.925 0.045 259);
+  --brand-200: oklch(0.86 0.075 259);
+  --brand-500: oklch(0.565 0.185 259);
+  --brand-600: oklch(0.482 0.192 259);
+  --brand-700: oklch(0.412 0.168 259);
+
+  /* Semantic */
+  --success-fg: oklch(0.505 0.125 155);
+  --success-bg: oklch(0.955 0.035 155);
+  --warning-fg: oklch(0.545 0.12 72);
+  --warning-bg: oklch(0.96 0.045 82);
+  --danger-fg: oklch(0.525 0.19 25);
+  --danger-bg: oklch(0.958 0.028 25);
+
+  --shadow-card: 0 1px 2px oklch(0.22 0.02 258 / 0.05), 0 1px 3px oklch(0.22 0.02 258 / 0.05);
+  --shadow-raised: 0 4px 12px oklch(0.22 0.02 258 / 0.07), 0 1px 3px oklch(0.22 0.02 258 / 0.05);
+  --shadow-overlay: 0 16px 48px oklch(0.22 0.02 258 / 0.18);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --surface-canvas: oklch(0.168 0.014 258);
+  --surface-raised: oklch(0.212 0.016 258);
+  --surface-sunken: oklch(0.192 0.015 258);
+  --surface-inverse: oklch(0.955 0.004 255);
+
+  --text-primary: oklch(0.965 0.003 255);
+  --text-secondary: oklch(0.765 0.012 258);
+  --text-muted: oklch(0.64 0.014 258);
+  --text-inverse: oklch(0.2 0.025 258);
+
+  --line-subtle: oklch(0.295 0.016 258);
+  --line-strong: oklch(0.375 0.019 258);
+
+  --brand-50: oklch(0.265 0.055 259);
+  --brand-100: oklch(0.33 0.095 259);
+  --brand-200: oklch(0.4 0.13 259);
+  --brand-500: oklch(0.68 0.155 259);
+  --brand-600: oklch(0.625 0.175 259);
+  --brand-700: oklch(0.73 0.14 259);
+
+  --success-fg: oklch(0.76 0.13 155);
+  --success-bg: oklch(0.29 0.07 155);
+  --warning-fg: oklch(0.8 0.13 82);
+  --warning-bg: oklch(0.31 0.07 72);
+  --danger-fg: oklch(0.735 0.15 25);
+  --danger-bg: oklch(0.315 0.09 25);
+
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.32);
+  --shadow-raised: 0 4px 14px oklch(0 0 0 / 0.4);
+  --shadow-overlay: 0 16px 48px oklch(0 0 0 / 0.55);
+}
+
+@theme inline {
+  --color-canvas: var(--surface-canvas);
+  --color-raised: var(--surface-raised);
+  --color-sunken: var(--surface-sunken);
+  --color-inverse: var(--surface-inverse);
+
+  --color-ink: var(--text-primary);
+  --color-ink-secondary: var(--text-secondary);
+  --color-ink-muted: var(--text-muted);
+  --color-ink-inverse: var(--text-inverse);
+
+  --color-line: var(--line-subtle);
+  --color-line-strong: var(--line-strong);
+
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+
+  --color-success: var(--success-fg);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning-fg);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger-fg);
+  --color-danger-bg: var(--danger-bg);
+
+  /*
+   * System font stack: no webfont request, no FOUT, no layout shift and nothing to
+   * preload. On the platforms this ships to it resolves to Segoe UI, SF Pro or Roboto,
+   * all of which are professional UI typefaces.
+   */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+  --shadow-overlay: var(--shadow-overlay);
+
+  --radius-card: 0.75rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--surface-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings read better balanced; body copy reads better with pretty. */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.011em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One visible focus treatment for the whole app. */
+  :focus-visible {
+    outline: 2px solid var(--brand-600);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  /* Reserve the scrollbar so opening a dialog cannot shift layout (CLS). */
+  @supports (scrollbar-gutter: stable) {
+    html {
+      scrollbar-gutter: stable;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /*
+   * Lets the browser skip layout and paint for off-screen sections. Applied to long
+   * lists and below-the-fold blocks; the intrinsic size keeps the scrollbar honest.
+   */
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 320px;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Skeleton shimmer. One keyframe, GPU-friendly, no JS. */
+  .shimmer {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in oklab, var(--surface-raised) 65%, transparent) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+
+  .animate-rise {
+    animation: rise 0.16s ease-out;
+  }
+
+  .animate-fade {
+    animation: fade 0.14s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
